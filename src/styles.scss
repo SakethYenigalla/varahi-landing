@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---- Fonts (matches Varahi Home Simple.html) ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Telugu:wght@500;600;700&display=swap');
+
+/* ---- Base ---- */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+html { scroll-behavior: smooth; }
+body {
+  @apply font-sans bg-cream text-ink antialiased;
+  line-height: 1.55;
+}
+
+/* Telugu run helper — matches `.te` from the source */
+.te { font-family: 'Noto Serif Telugu', 'Inter', serif; }
+
+/* ---- Component classes ---- */
+@layer components {
+
+  /* ----- Buttons (1:1 with .btn / .btn-primary / .btn-outline / .btn-gold) ----- */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2
+           px-[18px] py-[10px] rounded-md
+           text-sm font-semibold no-underline
+           border border-transparent cursor-pointer font-sans
+           transition-colors duration-150;
+  }
+  .btn-primary {
+    @apply btn bg-maroon text-white border-maroon hover:bg-maroonDark hover:border-maroonDark;
+  }
+  .btn-outline {
+    @apply btn bg-transparent text-maroon border-maroon hover:bg-maroon hover:text-white;
+  }
+  .btn-gold {
+    @apply btn bg-gold text-white border-gold hover:bg-maroon hover:border-maroon;
+  }
+
+  /* ----- Eyebrow label ----- */
+  .eyebrow {
+    @apply text-[11px] font-bold uppercase text-gold;
+    letter-spacing: 0.32em;
+  }
+
+  /* ----- Section headers ----- */
+  .section-head {
+    @apply text-center mb-12;
+  }
+  .section-head .eyebrow { @apply mb-2.5; }
+  .section-head h2 {
+    font-size: clamp(28px, 4vw, 40px);
+    @apply font-bold text-maroonDark mb-2 m-0;
+    letter-spacing: -0.01em;
+  }
+  .section-head p { @apply text-muted m-0 text-base; }
+
+  /* ----- Form fields ----- */
+  .field { @apply mb-3.5; }
+  .field label {
+    @apply block text-xs font-medium text-muted mb-1.5;
+    letter-spacing: 0.08em;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    @apply w-full bg-white text-ink border border-line rounded-md
+           px-3 py-2.5 text-sm font-sans
+           focus:outline-none focus:border-maroon transition-colors;
+  }
+  .field textarea { @apply resize-y min-h-[80px]; }
+  .field-row { @apply grid grid-cols-2 gap-3; }
+  @media (max-width: 860px) {
+    .field-row { @apply grid-cols-1; }
+  }
+
+  .field-error {
+    @apply mt-1 text-xs font-medium text-red-700;
+  }
+
+  /* ----- Pill toggle ----- */
+  .pill-row { @apply flex flex-wrap gap-2; }
+  .pill {
+    @apply px-3.5 py-2 rounded-full border border-line bg-white text-ink
+           text-[13px] cursor-pointer font-sans transition-colors;
+  }
+  .pill:hover { @apply border-gold; }
+  .pill.active {
+    @apply bg-maroon text-white border-maroon;
+  }
+
+  /* ----- Generic page wrapper ----- */
+  .page {
+    @apply max-w-page mx-auto;
+  }
+}
