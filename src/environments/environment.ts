@@ -12,5 +12,5 @@ export const environment = {
   production: true,
 
   inquiryEndpoint:
-    'https://script.google.com/macros/s/AKfycbwF5frQf95P_BuNTVJ6RNouGWCt260G30J_DnEIpOYtJHJAlwRyc3DqeHHC-tF_XlQu/exec',
+    'https://script.google.com/macros/s/AKfycbzGeDK2mXA4weD99hZCxFV_1hHFU2GjKeF70QTYrQG46mgg5qV35UYBb5LxRA9Ahe0Z/exec',
 };
