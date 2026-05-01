@@ -12,5 +12,5 @@ export const environment = {
   production: true,
 
   inquiryEndpoint:
-    'https://script.google.com/macros/s/PASTE_YOUR_DEPLOYMENT_ID/exec',
+    'https://script.google.com/macros/s/AKfycbwF5frQf95P_BuNTVJ6RNouGWCt260G30J_DnEIpOYtJHJAlwRyc3DqeHHC-tF_XlQu/exec',
 };
