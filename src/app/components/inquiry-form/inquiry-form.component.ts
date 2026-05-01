@@ -5,6 +5,7 @@ import {
   ReactiveFormsModule, Validators,
 } from '@angular/forms';
 import { ToastService } from '../../services/toast.service';
+import { environment } from '../../../environments/environment';
 
 type ServiceKey = 'catering' | 'plot' | 'house' | 'both';
 
@@ -180,11 +181,43 @@ export class InquiryFormComponent {
 
     this.loading.set(true);
 
-    // Phase-1 stub. Replace with HttpClient.post(...) when the backend exists.
     const payload = this.form.value as InquiryPayload;
-    console.info('[Inquiry] submitted', payload);
+    const enriched = {
+      ...payload,
+      submittedAt: new Date().toISOString(),
+      userAgent:   navigator.userAgent,
+      pageUrl:     window.location.href,
+    };
 
-    setTimeout(() => {
+    void this.sendInquiry(enriched);
+  }
+
+  /**
+   * POST to the Apps Script endpoint. Uses `text/plain` content-type so the
+   * browser treats it as a CORS-simple request (no preflight). Apps Script
+   * reads the raw body via `e.postData.contents` regardless of content-type.
+   *
+   * Falls back to log-only mode when no endpoint is configured.
+   */
+  private async sendInquiry(payload: object): Promise<void> {
+    const url = environment.inquiryEndpoint;
+    const isPlaceholder = !url || url.includes('PASTE_YOUR_DEPLOYMENT_ID');
+
+    try {
+      if (isPlaceholder) {
+        console.info('[Inquiry][dev] no endpoint configured — payload:', payload);
+      } else {
+        await fetch(url, {
+          method: 'POST',
+          // Simple-CORS: no preflight, no headers Apps Script can't echo back.
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+          // Apps Script web apps don't return CORS headers — opaque response is OK.
+          mode: 'no-cors',
+          redirect: 'follow',
+        });
+      }
+
       this.loading.set(false);
       this.submitted.set(true);
       this.toast.show({
@@ -192,8 +225,15 @@ export class InquiryFormComponent {
         body: "We'll be in touch within a few hours.",
         variant: 'success',
       });
-      // Revert the success label after 4s
       setTimeout(() => this.submitted.set(false), 4000);
-    }, 700);
+    } catch (err) {
+      console.error('[Inquiry] submit failed', err);
+      this.loading.set(false);
+      this.toast.show({
+        title: "Couldn't send inquiry",
+        body: 'Please try again, or call us directly at +91 77992 46666.',
+        variant: 'error',
+      });
+    }
   }
 }
